@@ -56,7 +56,7 @@ class ThongBaoPage extends StatelessWidget {
           } else {
             List<dynamic>? notifications = snapshot.data;
             if (notifications == null || notifications.isEmpty) {
-              return Center(child: Text('No notifications found.'));
+              return Center(child: Text('Không có thông báo!'));
             }
             return ListView.builder(
               itemCount: notifications.length,
