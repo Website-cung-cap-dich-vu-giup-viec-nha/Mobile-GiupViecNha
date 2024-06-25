@@ -26,7 +26,6 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
   DateTime selectedDate = DateTime.now();
   List<dynamic> kieuDichVus = [];
   List<dynamic> chiTietDichVus = [];
-  final modalRef = GlobalKey<FormState>();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(

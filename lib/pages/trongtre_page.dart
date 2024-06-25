@@ -25,7 +25,6 @@ class _TrongTrePageState extends State<TrongTrePage> {
   int tongTien = 0;
   DateTime selectedDate = DateTime.now();
   List<dynamic> chiTietDichVus = [];
-  final modalRef = GlobalKey<FormState>();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
