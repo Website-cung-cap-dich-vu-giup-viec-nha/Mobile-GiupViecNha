@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [
         Locale('vi', 'VN'),
       ],
+      navigatorObservers: [routeObserver],
       initialRoute: '/',
       routes: {
         '/': (context) => const MainPage(),

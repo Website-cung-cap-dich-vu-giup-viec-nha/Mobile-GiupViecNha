@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:giupviecnha/config.dart';
 import 'package:giupviecnha/pages/chitietngaylam_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class HoaDonPage extends StatelessWidget {
     if (token != null) {
       try {
         final response = await http.get(
-          Uri.parse('http://127.0.0.1:8000/api/auth/profile'),
+          Uri.parse('$baseUrl/api/auth/profile'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $token',
@@ -25,7 +26,7 @@ class HoaDonPage extends StatelessWidget {
 
         final response2 = await http.get(
           Uri.parse(
-              'http://127.0.0.1:8000/api/layIdKhachHang/${json["user"]["id"]}'),
+              '$baseUrl/api/layIdKhachHang/${json["user"]["id"]}'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $token',
@@ -34,7 +35,7 @@ class HoaDonPage extends StatelessWidget {
         final json2 = jsonDecode(response2.body);
 
         final uri = Uri.parse(
-            'http://localhost:8000/api/layPhieuDichVuTheoIdKhachHang/${json2[0]}');
+            '$baseUrl/api/layPhieuDichVuTheoIdKhachHang/${json2[0]}');
         final response3 = await http.get(uri);
         dsHD = jsonDecode(response3.body);
         return dsHD;
@@ -53,6 +54,7 @@ class HoaDonPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Hóa đơn'),
       ),
       body: FutureBuilder(

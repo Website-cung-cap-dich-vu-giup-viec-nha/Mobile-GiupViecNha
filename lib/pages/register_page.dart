@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:giupviecnha/config.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
@@ -23,7 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _formKey.currentState?.save();
       try {
         final response = await http.post(
-          Uri.parse('http://127.0.0.1:8000/api/auth/register'),
+          Uri.parse('$baseUrl/api/auth/register'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
