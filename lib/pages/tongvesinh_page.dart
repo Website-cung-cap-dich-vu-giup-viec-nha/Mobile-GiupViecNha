@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:giupviecnha/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -83,7 +84,7 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
     if (token != null) {
       try {
         final response = await http.get(
-          Uri.parse('http://127.0.0.1:8000/api/auth/profile'),
+          Uri.parse('$baseUrl/api/auth/profile'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $token',
@@ -93,7 +94,7 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
 
         final response2 = await http.get(
           Uri.parse(
-              'http://127.0.0.1:8000/api/layIdKhachHang/${json["user"]["id"]}'),
+              '$baseUrl/api/layIdKhachHang/${json["user"]["id"]}'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $token',
@@ -120,7 +121,7 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
   }
 
   void loadKieuDichVu() async {
-    final uri = Uri.parse('http://localhost:8000/api/layKieuDVByIdDV/2');
+    final uri = Uri.parse('$baseUrl/api/layKieuDVByIdDV/2');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     setState(() {
@@ -130,7 +131,7 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
 
   void loadChiTietDichVu() async {
     final uri = Uri.parse(
-        'http://localhost:8000/api/layChiTietDVTheoIdKieuDV/${idKieuDV!}');
+        '$baseUrl/api/layChiTietDVTheoIdKieuDV/${idKieuDV!}');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     setState(() {
@@ -148,7 +149,7 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
           orElse: () => null)["BuoiDangKyDichVu"];
       try {
         final response = await http.post(
-          Uri.parse('http://127.0.0.1:8000/api/phieudichvu'),
+          Uri.parse('$baseUrl/api/phieudichvu'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -427,7 +428,7 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                ElevatedButton(
+                OutlinedButton(
                   onPressed: handleDatDichVu,
                   child: const Text('Xác nhận'),
                 ),

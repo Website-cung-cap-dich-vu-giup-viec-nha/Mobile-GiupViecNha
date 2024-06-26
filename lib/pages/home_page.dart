@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:giupviecnha/config.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -13,7 +14,7 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> dichvus = [];
 
   void _getDanhSachDichVu() async {
-    final uri = Uri.parse('http://localhost:8000/api/dichvu');
+    final uri = Uri.parse('$baseUrl/api/dichvu');
     final response = await http.get(uri);
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);

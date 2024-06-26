@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:giupviecnha/config.dart';
 import 'package:giupviecnha/pages/danhgia_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class _ChiTietNgayLamPageState extends State<ChiTietNgayLamPage> {
   }
 
   void loadChiTietNgayLam() async {
-    final uri = Uri.parse('http://localhost:8000/api/layChiTietNLTheoIdPDV/${widget.idPhieuDichVu}');
+    final uri = Uri.parse('$baseUrl/api/layChiTietNLTheoIdPDV/${widget.idPhieuDichVu}');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     setState(() {
@@ -66,7 +67,7 @@ class _ChiTietNgayLamPageState extends State<ChiTietNgayLamPage> {
                     if (chiTiet['TinhTrangDichVu'] == 3)
                       Align(
                         alignment: Alignment.centerRight,
-                        child: ElevatedButton(
+                        child: OutlinedButton(
                           onPressed: () {
                             Navigator.push(
                               context,

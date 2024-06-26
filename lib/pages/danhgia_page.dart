@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:giupviecnha/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -26,13 +27,13 @@ class _DanhGiaPageState extends State<DanhGiaPage> {
 
   void loadDanhGia() async {
     final uri = Uri.parse(
-        'http://localhost:8000/api/layDanhGiaByIdCTNVLDV/${widget.idChiTietNhanVienLamDichVu}');
+        '$baseUrl/api/layDanhGiaByIdCTNVLDV/${widget.idChiTietNhanVienLamDichVu}');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     if (json.isNotEmpty) {
       setState(() {
         danhgia = json[0];
-        soSao = danhgia['SoSao'];
+        soSao = double.parse(danhgia['SoSao'].toString());
         yKien = danhgia['YKien'] ?? '';
         yKienController.text = yKien;
       });
@@ -52,7 +53,7 @@ class _DanhGiaPageState extends State<DanhGiaPage> {
       final response;
       if (danhgia == null) {
         response = await http.post(
-          Uri.parse('http://127.0.0.1:8000/api/danhgia/'),
+          Uri.parse('$baseUrl/api/danhgia/'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -65,7 +66,7 @@ class _DanhGiaPageState extends State<DanhGiaPage> {
         );
       } else {
         response = await http.put(
-          Uri.parse('http://127.0.0.1:8000/api/danhgia/${danhgia['idDanhGia']}'),
+          Uri.parse('$baseUrl/api/danhgia/${danhgia['idDanhGia']}'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -148,7 +149,7 @@ class _DanhGiaPageState extends State<DanhGiaPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                ElevatedButton(
+                OutlinedButton(
                   onPressed: () {
                     luuDanhGia();
                   },

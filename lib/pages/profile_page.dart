@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:giupviecnha/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TaiKhoanPage extends StatefulWidget {
-  const TaiKhoanPage({super.key});
+  final VoidCallback refreshSoLgTB;
+
+  const TaiKhoanPage({super.key, required this.refreshSoLgTB});
 
   @override
   State<TaiKhoanPage> createState() => _TaiKhoanPageState();
@@ -20,7 +23,7 @@ class _TaiKhoanPageState extends State<TaiKhoanPage> {
     if (token != null) {
       try {
         final response = await http.get(
-            Uri.parse('http://127.0.0.1:8000/api/auth/profile'),
+            Uri.parse('$baseUrl/api/auth/profile'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
               'Authorization': 'Bearer $token',
@@ -43,7 +46,7 @@ class _TaiKhoanPageState extends State<TaiKhoanPage> {
     final String? token = prefs.getString('token');
     try {
       final response = await http.get(
-          Uri.parse('http://127.0.0.1:8000/api/auth/logout'),
+          Uri.parse('$baseUrl/api/auth/logout'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $token',
@@ -54,6 +57,7 @@ class _TaiKhoanPageState extends State<TaiKhoanPage> {
         isLogined = false;
         user = {};
       });
+      widget.refreshSoLgTB();
       Navigator.pushNamed(context, "/dangnhap");
     } catch (error) {
       print(error);
@@ -78,9 +82,18 @@ class _TaiKhoanPageState extends State<TaiKhoanPage> {
               decoration: const BoxDecoration(color: Colors.white),
               child: Row(
                 children: [
-                  const CircleAvatar(
-                    backgroundColor: Colors.deepOrangeAccent,
-                    radius: 40,
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.deepOrangeAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.person_outline,
+                      size: 50,
+                      color: Colors.white,
+                    ),
                   ),
                   Expanded(
                     child: Column(

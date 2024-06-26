@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:giupviecnha/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -85,7 +86,7 @@ class _TrongTrePageState extends State<TrongTrePage> {
     if (token != null) {
       try {
         final response = await http.get(
-          Uri.parse('http://127.0.0.1:8000/api/auth/profile'),
+          Uri.parse('$baseUrl/api/auth/profile'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $token',
@@ -95,7 +96,7 @@ class _TrongTrePageState extends State<TrongTrePage> {
 
         final response2 = await http.get(
           Uri.parse(
-              'http://127.0.0.1:8000/api/layIdKhachHang/${json["user"]["id"]}'),
+              '$baseUrl/api/layIdKhachHang/${json["user"]["id"]}'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $token',
@@ -122,7 +123,7 @@ class _TrongTrePageState extends State<TrongTrePage> {
   }
 
   void loadCombobox() async {
-    final uri = Uri.parse('http://localhost:8000/api/layChiTietDVTheoIdDV/3');
+    final uri = Uri.parse('$baseUrl/api/layChiTietDVTheoIdDV/3');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     setState(() {
@@ -140,7 +141,7 @@ class _TrongTrePageState extends State<TrongTrePage> {
           orElse: () => null)["BuoiDangKyDichVu"];
       try {
         final response = await http.post(
-          Uri.parse('http://127.0.0.1:8000/api/phieudichvu'),
+          Uri.parse('$baseUrl/api/phieudichvu'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -441,7 +442,7 @@ class _TrongTrePageState extends State<TrongTrePage> {
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                ElevatedButton(
+                OutlinedButton(
                   onPressed: handleDatDichVu,
                   child: const Text('Xác nhận'),
                 ),

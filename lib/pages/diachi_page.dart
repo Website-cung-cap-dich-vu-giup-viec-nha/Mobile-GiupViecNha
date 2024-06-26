@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:giupviecnha/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -70,7 +71,7 @@ class _DiaChiPageState extends State<DiaChiPage> {
       final macDinhValue = dsDiaChi.length == 0 ? 1 : 0;
       try {
         final response = await http.post(
-          Uri.parse('http://127.0.0.1:8000/api/diachi/'),
+          Uri.parse('$baseUrl/api/diachi/'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -116,7 +117,7 @@ class _DiaChiPageState extends State<DiaChiPage> {
     if (token != null) {
       try {
         final response = await http.get(
-          Uri.parse('http://127.0.0.1:8000/api/auth/profile'),
+          Uri.parse('$baseUrl/api/auth/profile'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $token',
@@ -136,7 +137,7 @@ class _DiaChiPageState extends State<DiaChiPage> {
 
   void loadDiaChi() async {
     final uri =
-        Uri.parse('http://localhost:8000/api/layDiaChiByIdNguoiDung/$idND');
+        Uri.parse('$baseUrl/api/layDiaChiByIdNguoiDung/$idND');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     setState(() {
@@ -145,7 +146,7 @@ class _DiaChiPageState extends State<DiaChiPage> {
   }
 
   void loadProvince() async {
-    final uri = Uri.parse('http://localhost:8000/api/province');
+    final uri = Uri.parse('$baseUrl/api/province');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     setState(() {
@@ -155,7 +156,7 @@ class _DiaChiPageState extends State<DiaChiPage> {
 
   void loadDistrict() async {
     final uri =
-        Uri.parse('http://localhost:8000/api/layHuyenByProvinceId/$idProvince');
+        Uri.parse('$baseUrl/api/layHuyenByProvinceId/$idProvince');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     setState(() {
@@ -168,7 +169,7 @@ class _DiaChiPageState extends State<DiaChiPage> {
 
   void loadWard() async {
     final uri =
-        Uri.parse('http://localhost:8000/api/layXaByDistrictId/$idDistrict');
+        Uri.parse('$baseUrl/api/layXaByDistrictId/$idDistrict');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     setState(() {
@@ -237,7 +238,7 @@ class _DiaChiPageState extends State<DiaChiPage> {
                         },
                       ),
                       const SizedBox(height: 16.0),
-                      ElevatedButton(
+                      OutlinedButton(
                         onPressed: handleChonDiaChi,
                         child: const Text('Xác nhận'),
                       ),
@@ -375,7 +376,7 @@ class _DiaChiPageState extends State<DiaChiPage> {
                         },
                       ),
                       const SizedBox(height: 16.0),
-                      ElevatedButton(
+                      OutlinedButton(
                         onPressed: themDiaChi,
                         child: const Text('Xác nhận'),
                       ),
