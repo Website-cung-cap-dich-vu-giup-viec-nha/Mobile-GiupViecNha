@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:giupviecnha/config.dart';
+import 'package:giupviecnha/pages/camondadanhgia_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -80,7 +81,9 @@ class _DanhGiaPageState extends State<DanhGiaPage> {
       }
       final ketqua = jsonDecode(response.body);
       if (ketqua["status"]) {
-        Navigator.pushReplacementNamed(context, "/");
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const CamOnDaDanhGiaPage()),
+        );
       } else {
         print('Thêm địa chỉ thất bại: ${response.body}');
       }
