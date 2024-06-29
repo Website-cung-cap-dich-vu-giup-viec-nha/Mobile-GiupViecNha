@@ -45,7 +45,7 @@ class _DanhGiaPageState extends State<DanhGiaPage> {
     if (soSao == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Vui lòng chọn số sao.'),
+          content: Text('Vui lòng chọn số sao!'),
         ),
       );
       return;

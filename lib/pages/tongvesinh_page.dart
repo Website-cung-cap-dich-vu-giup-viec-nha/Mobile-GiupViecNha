@@ -27,6 +27,7 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
   DateTime selectedDate = DateTime.now();
   List<dynamic> kieuDichVus = [];
   List<dynamic> chiTietDichVus = [];
+  late TextEditingController soBuoiController;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -116,8 +117,15 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
   @override
   void initState() {
     super.initState();
+    soBuoiController = TextEditingController(text: soBuoi.toString());
     loadKieuDichVu();
     setIdKhachHang();
+  }
+
+  @override
+  void dispose() {
+    soBuoiController.dispose();
+    super.dispose();
   }
 
   void loadKieuDichVu() async {
@@ -187,6 +195,35 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
     return 0;
   }
 
+  void setSoBuoi(String t) {
+    final selectedService = chiTietDichVus.firstWhere(
+            (item) => item['idChiTietDichVu'].toString() == idChiTietDV,
+        orElse: () => null);
+    if (selectedService != null) {
+      final buoiDangKy = selectedService['BuoiDangKyDichVu'] as String;
+      final soBuoiTrongTuan = buoiDangKy.split(' - ').length;
+      if (t.isEmpty) {
+        setState(() {
+          soBuoi = soBuoiTrongTuan;
+          soBuoiController.text = soBuoi.toString();
+        });
+      } else {
+        int so = int.parse(t);
+        if (so < soBuoiTrongTuan) {
+          setState(() {
+            soBuoi = soBuoiTrongTuan;
+            soBuoiController.text = soBuoi.toString();
+          });
+        } else {
+          setState(() {
+            soBuoi = so;
+            soBuoiController.text = soBuoi.toString();
+          });
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -254,6 +291,7 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
                   onChanged: (value) {
                     setState(() {
                       idChiTietDV = value!;
+                      setSoBuoi('');
                       calculateTongTien();
                     });
                   },
@@ -314,16 +352,16 @@ class _TongVeSinhPageState extends State<TongVeSinhPage> {
                         children: [
                           const Text("Số buổi"),
                           TextFormField(
+                            controller: soBuoiController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            initialValue: soBuoi.toString(),
                             keyboardType: TextInputType.number,
                             onChanged: (value) {
                               setState(() {
-                                soBuoi = int.tryParse(value) ?? soBuoi;
+                                setSoBuoi(value);
                                 calculateTongTien();
                               });
                             },

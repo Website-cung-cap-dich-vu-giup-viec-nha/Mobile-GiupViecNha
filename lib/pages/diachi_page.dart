@@ -68,6 +68,14 @@ class _DiaChiPageState extends State<DiaChiPage> {
   void themDiaChi() async {
     if (_formKey2.currentState?.validate() ?? false) {
       _formKey2.currentState?.save();
+      if (idND == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Vui lòng đăng nhập để thêm địa chỉ!'),
+          ),
+        );
+        return;
+      }
       final macDinhValue = dsDiaChi.length == 0 ? 1 : 0;
       try {
         final response = await http.post(
@@ -136,8 +144,7 @@ class _DiaChiPageState extends State<DiaChiPage> {
   }
 
   void loadDiaChi() async {
-    final uri =
-        Uri.parse('$baseUrl/api/layDiaChiByIdNguoiDung/$idND');
+    final uri = Uri.parse('$baseUrl/api/layDiaChiByIdNguoiDung/$idND');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     setState(() {
@@ -155,8 +162,7 @@ class _DiaChiPageState extends State<DiaChiPage> {
   }
 
   void loadDistrict() async {
-    final uri =
-        Uri.parse('$baseUrl/api/layHuyenByProvinceId/$idProvince');
+    final uri = Uri.parse('$baseUrl/api/layHuyenByProvinceId/$idProvince');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     setState(() {
@@ -168,8 +174,7 @@ class _DiaChiPageState extends State<DiaChiPage> {
   }
 
   void loadWard() async {
-    final uri =
-        Uri.parse('$baseUrl/api/layXaByDistrictId/$idDistrict');
+    final uri = Uri.parse('$baseUrl/api/layXaByDistrictId/$idDistrict');
     final response = await http.get(uri);
     final json = jsonDecode(response.body);
     setState(() {
