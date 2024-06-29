@@ -24,6 +24,8 @@ class _TrongTrePageState extends State<TrongTrePage> {
   TimeOfDay gioBatDau = TimeOfDay(hour: TimeOfDay.now().hour, minute: 0);
   String ghiChu = "";
   int tongTien = 0;
+  int minBuoi = 1;
+  int soBuoiCuaThang = 4;
   DateTime selectedDate = DateTime.now();
   List<dynamic> chiTietDichVus = [];
 
@@ -95,8 +97,7 @@ class _TrongTrePageState extends State<TrongTrePage> {
         final json = jsonDecode(response.body);
 
         final response2 = await http.get(
-          Uri.parse(
-              '$baseUrl/api/layIdKhachHang/${json["user"]["id"]}'),
+          Uri.parse('$baseUrl/api/layIdKhachHang/${json["user"]["id"]}'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $token',
@@ -171,6 +172,19 @@ class _TrongTrePageState extends State<TrongTrePage> {
     }
   }
 
+  void setMinBuoi() {
+    final selectedService = chiTietDichVus.firstWhere(
+        (item) => item['idChiTietDichVu'].toString() == idChiTietDV,
+        orElse: () => null);
+    if (selectedService != null) {
+      final buoiDangKy = selectedService['BuoiDangKyDichVu'] as String;
+      final soBuoiTrongTuan = buoiDangKy.split(' - ').length;
+      setState(() {
+        minBuoi = soBuoiTrongTuan;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -204,6 +218,8 @@ class _TrongTrePageState extends State<TrongTrePage> {
                   onChanged: (value) {
                     setState(() {
                       idChiTietDV = value!;
+                      setMinBuoi();
+                      soBuoi = soBuoiCuaThang * minBuoi;
                       calculateTongTien();
                     });
                   },
@@ -262,24 +278,38 @@ class _TrongTrePageState extends State<TrongTrePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("Số buổi"),
-                          TextFormField(
+                          const Text("Số tháng"),
+                          DropdownButtonFormField(
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            initialValue: soBuoi.toString(),
-                            keyboardType: TextInputType.number,
+                            isExpanded: true,
+                            value: soBuoiCuaThang.toString(),
                             onChanged: (value) {
                               setState(() {
-                                soBuoi = int.tryParse(value) ?? soBuoi;
+                                soBuoiCuaThang = int.parse(value!);
+                                soBuoi = soBuoiCuaThang * minBuoi;
                                 calculateTongTien();
                               });
                             },
+                            items: <String>['4', '8', '12']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value == '4'
+                                      ? '1 tháng'
+                                      : value == '8'
+                                          ? '2 tháng'
+                                          : '3 tháng',
+                                ),
+                              );
+                            }).toList(),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Vui lòng nhập số buổi!';
+                                return 'Vui lòng chọn số tháng!';
                               }
                               return null;
                             },

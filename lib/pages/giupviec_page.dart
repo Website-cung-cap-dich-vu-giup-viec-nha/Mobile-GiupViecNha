@@ -25,6 +25,7 @@ class _GiupViecPageState extends State<GiupViecPage> {
   int tongTien = 0;
   DateTime selectedDate = DateTime.now();
   List<dynamic> chiTietDichVus = [];
+  late TextEditingController soBuoiController;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -114,8 +115,15 @@ class _GiupViecPageState extends State<GiupViecPage> {
   @override
   void initState() {
     super.initState();
+    soBuoiController = TextEditingController(text: soBuoi.toString());
     loadCombobox();
     setIdKhachHang();
+  }
+
+  @override
+  void dispose() {
+    soBuoiController.dispose();
+    super.dispose();
   }
 
   void loadCombobox() async {
@@ -166,6 +174,35 @@ class _GiupViecPageState extends State<GiupViecPage> {
     }
   }
 
+  void setSoBuoi(String t) {
+    final selectedService = chiTietDichVus.firstWhere(
+            (item) => item['idChiTietDichVu'].toString() == idChiTietDV,
+        orElse: () => null);
+    if (selectedService != null) {
+      final buoiDangKy = selectedService['BuoiDangKyDichVu'] as String;
+      final soBuoiTrongTuan = buoiDangKy.split(' - ').length;
+      if (t.isEmpty) {
+        setState(() {
+          soBuoi = soBuoiTrongTuan;
+          soBuoiController.text = soBuoi.toString();
+        });
+      } else {
+        int so = int.parse(t);
+        if (so < soBuoiTrongTuan) {
+          setState(() {
+            soBuoi = soBuoiTrongTuan;
+            soBuoiController.text = soBuoi.toString();
+          });
+        } else {
+          setState(() {
+            soBuoi = so;
+            soBuoiController.text = soBuoi.toString();
+          });
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,6 +236,7 @@ class _GiupViecPageState extends State<GiupViecPage> {
                   onChanged: (value) {
                     setState(() {
                       idChiTietDV = value!;
+                      setSoBuoi('');
                       calculateTongTien();
                     });
                   },
@@ -259,16 +297,16 @@ class _GiupViecPageState extends State<GiupViecPage> {
                         children: [
                           const Text("Số buổi"),
                           TextFormField(
+                            controller: soBuoiController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            initialValue: soBuoi.toString(),
                             keyboardType: TextInputType.number,
                             onChanged: (value) {
                               setState(() {
-                                soBuoi = int.tryParse(value) ?? soBuoi;
+                                setSoBuoi(value);
                                 calculateTongTien();
                               });
                             },
